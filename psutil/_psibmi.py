@@ -190,7 +190,7 @@ def cpu_count_logical():
     return ncpus
 
 
-def cpu_count_physical():
+def cpu_count_cores():
     if hasattr(cext, 'cpu_count'):
         return cext.cpu_count()
     cursor = _conn.cursor()
