@@ -19,13 +19,10 @@
 
 #ifdef PSUTIL_SUNOS10
     #include "arch/solaris/v10/ifaddrs.h"
-#elif __PASE__
-    #include <as400_protos.h>
-    #define ifaddrs ifaddrs_pase
-    #define getifaddrs Qp2getifaddrs
-    #define freeifaddrs Qp2freeifaddrs
 #elif PSUTIL_AIX
     #include "arch/aix/ifaddrs.h"
+#elif PSUTIL_IBMI
+    #include "arch/ibmi/ifaddrs.h"
 #else
     #include <ifaddrs.h>
 #endif
@@ -47,7 +44,7 @@
     #include <netdb.h>
     #include <sys/sockio.h>
 #endif
-#if defined(PSUTIL_AIX)
+#if defined(PSUTIL_AIX) || defined(PSUTIL_IBMI)
     #include <netdb.h>
 #endif
 #if defined(PSUTIL_LINUX) || defined(PSUTIL_FREEBSD)
@@ -722,6 +719,7 @@ static PyMethodDef mod_methods[] = {
 #if defined(PSUTIL_BSD) || \
         defined(PSUTIL_OSX) || \
         defined(PSUTIL_SUNOS) || \
+        defined(PSUTIL_IBMI) || \
         defined(PSUTIL_AIX)
     if (PyModule_AddIntConstant(mod, "AF_LINK", AF_LINK)) INITERR;
 #endif

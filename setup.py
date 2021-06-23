@@ -41,6 +41,7 @@ from _common import LINUX  # NOQA
 from _common import MACOS  # NOQA
 from _common import NETBSD  # NOQA
 from _common import OPENBSD  # NOQA
+from _common import OS400  # NOQA
 from _common import POSIX  # NOQA
 from _common import SUNOS  # NOQA
 from _common import WINDOWS  # NOQA
@@ -282,26 +283,23 @@ elif SUNOS:
         libraries=['kstat', 'nsl', 'socket'])
 
 elif AIX:
-    if os.uname().sysname == 'OS400':
-        macros.append(("PSUTIL_AIX", 1))
-        ext = Extension(
-            'psutil._psutil_ibmi',
-            sources=sources + [
-                'psutil/_psutil_ibmi.c'],
-            libraries=['util'],
-            extra_compile_args=['-I/QOpenSys/pkgs/include'],
-            define_macros=macros)
-    else:
-        macros.append(("PSUTIL_AIX", 1))
-        ext = Extension(
-            'psutil._psutil_aix',
-            sources=sources + [
-                'psutil/_psutil_aix.c',
-                'psutil/arch/aix/net_connections.c',
-                'psutil/arch/aix/common.c',
-                'psutil/arch/aix/ifaddrs.c'],
-            libraries=['perfstat'],
-            define_macros=macros)
+    macros.append(("PSUTIL_AIX", 1))
+    ext = Extension(
+        'psutil._psutil_aix',
+        sources=sources + [
+            'psutil/_psutil_aix.c',
+            'psutil/arch/aix/net_connections.c',
+            'psutil/arch/aix/common.c',
+            'psutil/arch/aix/ifaddrs.c'],
+        libraries=['perfstat'],
+        define_macros=macros)
+elif OS400:
+    macros.append(("PSUTIL_IBMI", 1))
+    ext = Extension(
+        'psutil._psutil_ibmi',
+        sources=sources + [
+            'psutil/_psutil_ibmi.c'],
+        define_macros=macros)
 
 else:
     sys.exit('platform %s is not supported' % sys.platform)

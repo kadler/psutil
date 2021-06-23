@@ -187,7 +187,7 @@ def cpu_count_logical():
     cursor.execute("select CURRENT_CPU_CAPACITY from table (QSYS2.SYSTEM_STATUS()) x")
     ncpus = math.ceil(cursor.fetchone()[0])
     cursor.close()
-    return ncpus
+    return ncpus if ncpus > 0 else 1
 
 
 def cpu_count_cores():
@@ -197,7 +197,7 @@ def cpu_count_cores():
     cursor.execute("select CONFIGURED_CPUS from table (QSYS2.SYSTEM_STATUS()) x")
     ncpus = cursor.fetchone()[0]
     cursor.close()
-    return ncpus
+    return ncpus if ncpus > 0 else 1
 
 
 def cpu_stats():

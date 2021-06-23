@@ -87,6 +87,7 @@ from ._common import LINUX
 from ._common import MACOS
 from ._common import NETBSD  # NOQA
 from ._common import OPENBSD  # NOQA
+from ._common import OS400
 from ._common import OSX  # deprecated alias
 from ._common import POSIX  # NOQA
 from ._common import SUNOS
@@ -134,14 +135,14 @@ elif SUNOS:
     PROCFS_PATH = "/proc"
 
 elif AIX:
-    if os.uname().sysname == 'OS400':
-        from . import _psibmi as _psplatform
-    else:
-        from . import _psaix as _psplatform
+    from . import _psaix as _psplatform
 
     # This is public API and it will be retrieved from _pslinux.py
     # via sys.modules.
     PROCFS_PATH = "/proc"
+
+elif OS400:
+    from . import _psibmi as _psplatform
 
 else:  # pragma: no cover
     raise NotImplementedError('platform %s is not supported' % sys.platform)
@@ -172,7 +173,7 @@ __all__ = [
     "POWER_TIME_UNKNOWN", "POWER_TIME_UNLIMITED",
 
     "BSD", "FREEBSD", "LINUX", "NETBSD", "OPENBSD", "MACOS", "OSX", "POSIX",
-    "SUNOS", "WINDOWS", "AIX",
+    "SUNOS", "WINDOWS", "AIX", "OS400",
 
     # "RLIM_INFINITY", "RLIMIT_AS", "RLIMIT_CORE", "RLIMIT_CPU", "RLIMIT_DATA",
     # "RLIMIT_FSIZE", "RLIMIT_LOCKS", "RLIMIT_MEMLOCK", "RLIMIT_NOFILE",
